@@ -13,7 +13,6 @@ void setup() {
   
   lcd.begin(16,2);
 }
-
 void loop(){
   static byte heroPos = HERO_POSITION_RUN_LOWER_1;
   static byte newTerrainType = TERRAIN_EMPTY;
