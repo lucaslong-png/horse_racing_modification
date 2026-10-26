@@ -1,4 +1,7 @@
 #include <LiquidCrystal.h>
+#include <collectible.h>
+
+
 int tickrate = 100
 void setup() {
   pinMode(PIN_BUTTON, INPUT);
