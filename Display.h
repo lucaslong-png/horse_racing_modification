@@ -1,6 +1,6 @@
 #include <LiquidCrystal.h>
-#index 0-2 = horse
-#index 3-5 = obstacle
+//index 0-2 = horse
+//index 3-5 = obstacle
 //index 6-7 = collectible
 #define HORSE1 0
 #define HORSE2 1
@@ -14,10 +14,10 @@
 class Display {
   private:
     int horsechoice;
-    Static byte[][] graphics = {}; //2d array
     byte[0] = horsechoice.drawing;
   public:
     void setupLCD() {
+      Static byte[][] graphics = {}; //2d array
       lcd.begin();
       for (int i = 0; i < 8; ++i) {
         lcd.createChar(i, graphics[i]);

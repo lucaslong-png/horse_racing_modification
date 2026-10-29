@@ -7,9 +7,10 @@
 class horse {
   private:
     int ypos;
-    //xpos = 1
+    int xpos = 1 //can change
     byte[] image;
     byte[][] horseImages = {}; //3x5
+    
   public:
     void jump() {
       long starttime = millis()
