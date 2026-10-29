@@ -1,33 +1,64 @@
 #pragma once
-
 #include <LiquidCrystal.h>
 #include <Constants.h>
 #include <Display.h>
 
-class horse {
+class Horse {
   private:
     int ypos;
-    int xpos = 1 //can change
-    int animationState //0 = run1, 1 = run2, 2 = jump
-    byte[] image;
-    byte[][] horseImages = {}; //3x5
+    const int xpos = 1;
+    int animationState; //0 = run1, 1 = run2, 2 = jump
+    byte image[8];
+    byte horseImages[3][8]; //3x8
     
   public:
+    Horse() {
+      setSprite(0);
+      animationState = 0;
+      ypos = 0;
+    }
+
+    void setSprite(int type) {
+      for (int i = 0; i < 8; ++i) {
+        image[i] = horseImages[type][i];      
+      }
+    }
+
+    void display() {
+      Display.loadSprite(xpos, ypos, image);
+    }
+
+    //ignores jumping animation state
     void run() {
       if (animationState == 0) {
-        animationState == 1;
-        image = horseImages[animationState]
-        Display.loadSprite(image)
+        animationState = 1;
+        setSprite(animationState);
+        display();
       }
-
+      else if (animationState == 1) {
+        animationState = 0;
+        setSprite(animationState);
+        display();
+      }
     }  
 
-    void jump() {
-      long starttime = millis()
-      clear(1, 0);
-      Display.loadSprite(1, 1, image);
-      ypos = 1
-      delay(1000 / tickrate);
+    //assumes ypos = 0
+    long jump() {
+      long starttime = millis();
+      Display.clearCell(xpos, 0);
+      ypos = 1;
+      animationState = 2;
+      setSprite(animationState);
+      display();
+      return starttime;
+    }
+
+    void fall() {
+      Display.clearCell(xpos, 1);
+      ypos = 0;
+      animationState = 0;
+      setSprite(animationState);
+      display();
     }
 
 

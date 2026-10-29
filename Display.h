@@ -4,7 +4,7 @@
 //index 6-7 = collectible
 #define HORSE1 0
 #define HORSE2 1
-#define HORSE2 2
+#define HORSE3 2
 #define OBSTACLE1 3
 #define OBSTACLE2 4
 #define OBSTACLE3 5
@@ -15,9 +15,10 @@ class Display {
   private:
     int horsechoice;
     byte[0] = horsechoice.drawing;
+    LiquidCrystal lcd(12, 11, 6, 5, 4, 3);
   public:
     void setupLCD() {
-      Static byte[][] graphics = {}; //2d array
+      static byte graphics[][] = {}; //2d array
       lcd.begin();
       for (int i = 0; i < 8; ++i) {
         lcd.createChar(i, graphics[i]);
