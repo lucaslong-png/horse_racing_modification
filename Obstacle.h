@@ -4,8 +4,8 @@
 class Obstacle {
   private:
     //static int obstacleCount = 0;
-    static const byte sprites[3][8]; 
-    byte image[8];
+    //static const byte sprites[3][8]; 
+    //byte image[8];
     int spriteChoice;
     int xpos;
     int ypos;
