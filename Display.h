@@ -2,9 +2,9 @@
 //index 0-2 = horse
 //index 3-5 = obstacle
 //index 6-7 = collectible
-#define HORSE1 0
-#define HORSE2 1
-#define HORSE3 2
+#define HORSERUN1 0
+#define HORSERUN2 1
+#define HORSEJUMP 2
 #define OBSTACLE1 3
 #define OBSTACLE2 4
 #define OBSTACLE3 5
@@ -13,29 +13,25 @@
 
 class Display {
   private:
-    int horsechoice;
-    byte[0] = horsechoice.drawing;
-    LiquidCrystal lcd(12, 11, 6, 5, 4, 3);
+    static LiquidCrystal lcd;
   public:
-    void setupLCD() {
-      static byte graphics[][] = {}; //2d array
-      lcd.begin();
+    static void setupLCD() {
+      static byte graphics[8][8] = {}; //8x8 
+      lcd.begin(16, 2);
       for (int i = 0; i < 8; ++i) {
         lcd.createChar(i, graphics[i]);
       }
     }
     
-    void loadSprite(int x, int y, byte[] image) {
+    static void loadSprite(int x, int y, int slot) {
       lcd.setCursor(x, y);
-      lcd.write(image);
+      lcd.write(byte(slot));
     }
 
-    void clearCell(int x, int y) {
+    static void clearCell(int x, int y) {
       lcd.setCursor(x, y);
       lcd.print(" ");
     }
 
-    void setHorseChoice(int c) {
-      horsechoice = c
-    }
 };
+LiquidCrystal Display::lcd(12, 11, 6, 5, 4, 3);

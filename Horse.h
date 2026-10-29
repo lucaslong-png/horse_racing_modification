@@ -18,14 +18,12 @@ class Horse {
       ypos = 0;
     }
 
-    void setSprite(int type) {
-      for (int i = 0; i < 8; ++i) {
-        image[i] = horseImages[type][i];      
-      }
+    void setSprite(int state) {
+      animationState = state;
     }
 
     void display() {
-      Display.loadSprite(xpos, ypos, image);
+      Display.loadSprite(xpos, ypos, animationState);
     }
 
     //ignores jumping animation state

@@ -1,10 +1,12 @@
 #include <LiquidCrystal.h>
+#include <Display.h>
 
 class Obstacle {
   private:
     //static int obstacleCount = 0;
     static const byte sprites[3][8]; 
     byte image[8];
+    int spriteChoice;
     int xpos;
     int ypos;
     bool exists;
@@ -15,13 +17,11 @@ class Obstacle {
     }
 
     void display() {
-      Display.loadSprite(xpos, ypos, image);
+      Display.loadSprite(xpos, ypos, spriteChoice + 3);
     }
 
     void setSprite(int type) {
-      for (int i = 0; i < 8; ++i) {
-        image[i] = sprites[type][i];      
-      }
+      spriteChoice = type;
     }
 
     //obstacles length will be 8
