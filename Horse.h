@@ -14,6 +14,11 @@ class horse {
     
   public:
     void run() {
+      if (animationState == 0) {
+        animationState == 1;
+        image = horseImages[animationState]
+        Display.loadSprite(image)
+      }
 
     }  
 
