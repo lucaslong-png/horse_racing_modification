@@ -1,17 +1,17 @@
 #pragma once
 #include <LiquidCrystal.h>
-#include <Constants.h>
 #include <Display.h>
 
 class Horse {
   private:
-    int ypos;
-    const int xpos = 1;
     int animationState; //0 = run1, 1 = run2, 2 = jump
     byte image[8];
     byte horseImages[3][8]; //3x8
+    const int xpos = 1;
+    int ypos;
     
   public:
+
     Horse() {
       setSprite(0);
       animationState = 0;
@@ -57,6 +57,14 @@ class Horse {
       animationState = 0;
       setSprite(animationState);
       display();
+    }
+
+    int getXpos() {
+      return xpos;
+    }
+
+    int getYpos() {
+      return ypos;
     }
 
 
