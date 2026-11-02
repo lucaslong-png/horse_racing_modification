@@ -1,5 +1,6 @@
+#pragma once
 #include <LiquidCrystal.h>
-#include <Display.h>
+#include "Display.h"
 
 class Obstacle {
   private:
@@ -17,7 +18,7 @@ class Obstacle {
     }
 
     void display() {
-      Display.loadSprite(xpos, ypos, spriteChoice + 3);
+      Display::loadSprite(xpos, ypos, spriteChoice + 3);
     }
 
     void setSprite(int type) {
@@ -39,12 +40,12 @@ class Obstacle {
     }
 
     static void deleteObstacle(Obstacle& o) {
-      Display.clearCell(o.xpos, o.ypos);
+      Display::clearCell(o.xpos, o.ypos);
       o.exists = false;
     }
 
     void moveLeft() {
-      Display.clearCell(xpos, ypos);
+      Display::clearCell(xpos, ypos);
       if (xpos > 0) {
         --xpos;
         display();

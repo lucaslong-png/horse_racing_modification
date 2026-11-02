@@ -1,8 +1,9 @@
+#include "Constants.h"
 #include <LiquidCrystal.h>
-#include <Display.h>
-#include <Horse.h>
+#include "Display.h"
+#include "Horse.h"
 //#include <Constants.h>
-#include <Obstacle.h>
+#include "Obstacle.h"
 //#include <Collectible.h>
 
 int tickrate = 20;
@@ -75,7 +76,7 @@ void generateObstacles() {
     prob = 1.0 * space / (space + 4);
   }
   if (random(100) / 100.0 < prob) {
-    Obstacle.spawn(obs, random(0, 3), row);
+    Obstacle::spawn(obs, random(0, 3), row);
   }
 }
 
@@ -102,22 +103,17 @@ void setup() {
   // Digital pin 2 maps to interrupt 0
   attachInterrupt(0/*PIN_BUTTON*/, buttonPush, FALLING);
 
-  Display.setupLCD();
+  Display::setupLCD();
   
 }
 
 void loop() {
-  static byte heroPos = HERO_POSITION_RUN_LOWER_1;
-  static byte newTerrainType = TERRAIN_EMPTY;
-  static byte newTerrainDuration = 1;
   static bool playing = false;
-  static bool blink = false;
   static unsigned int distance = 0;
 
   if (!playing) {
     if (buttonPushed) {
       //initializeGraphics();
-      heroPos = HERO_POSITION_RUN_LOWER_1;
       playing = true;
       buttonPushed = false;
       distance = 0;

@@ -1,3 +1,4 @@
+/*
 #include <LiquidCrystal.h>
 //not done
 class Collectible : public Obstacle {
@@ -5,3 +6,4 @@ class Collectible : public Obstacle {
         Display.loadSprite(xpos, ypos, spriteChoice + 6);
     }
 }
+*/

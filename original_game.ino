@@ -2,6 +2,7 @@
 // Written for EDD 111 2026
 // Written By: Alejandro Wiltshire
 // Edited by: Koen Gieskes
+/*
 
 #include <LiquidCrystal.h>
 
@@ -235,12 +236,13 @@ void setup() {
   digitalWrite(PIN_AUTOPLAY, HIGH);
   
   // Digital pin 2 maps to interrupt 0
-  attachInterrupt(0/*PIN_BUTTON*/, buttonPush, FALLING);
+  attachInterrupt(0, buttonPush, FALLING);
   
   initializeGraphics();
   
   lcd.begin(16,2);
 }
+
 
 // Loop that begins and runs the game
 void loop(){
@@ -310,3 +312,4 @@ void loop(){
   }
   delay(50);
 }
+*/

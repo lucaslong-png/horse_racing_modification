@@ -1,3 +1,4 @@
+#pragma once
 #include <LiquidCrystal.h>
 //index 0-2 = horse
 //index 3-5 = obstacle
@@ -16,7 +17,95 @@ class Display {
     static LiquidCrystal lcd;
   public:
     static void setupLCD() {
-      static byte graphics[8][8] = {}; //8x8 
+      static byte graphics[8][8] = {
+        {
+          B00000,
+          B00000,
+          B00010,
+          B00011,
+          B00010,
+          B01110,
+          B01010,
+          B01010,
+        },
+        
+        {
+          B00000,
+          B00000,
+          B00010,
+          B00011,
+          B00010,
+          B01110,
+          B01001,
+          B10010,
+        },
+
+        {
+          B00000,
+          B00000,
+          B00010,
+          B00011,
+          B00010,
+          B01110,
+          B01001,
+          B10001,
+        },
+
+        {
+          B01110,
+          B11111,
+          B11111,
+          B01110,
+          B00100,
+          B00100,
+          B00100,
+          B00100,
+        },
+
+        {
+          B00000,
+          B00000,
+          B00000,
+          B00000,
+          B00011,
+          B00111,
+          B00111,
+          B00011,
+        },
+
+        {
+          B00000,
+          B00000,
+          B00000,
+          B00000,
+          B11000,
+          B11100,
+          B11100,
+          B11000,
+        },
+        {
+          B00000,
+          B00000,
+          B00000,
+          B00000,
+          B00011,
+          B00111,
+          B00111,
+          B00011,
+        },
+
+        {
+          B00000,
+          B00000,
+          B00000,
+          B00000,
+          B11000,
+          B11100,
+          B11100,
+          B11000,
+        }
+        //placeholders
+        }; //8x8 
       lcd.begin(16, 2);
       for (int i = 0; i < 8; ++i) {
         lcd.createChar(i, graphics[i]);
