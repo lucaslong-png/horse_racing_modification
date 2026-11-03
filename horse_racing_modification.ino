@@ -6,7 +6,7 @@
 #include "Obstacle.h"
 //#include <Collectible.h>
 
-int tickrate = 20;
+int tickrate = 5;
 int currentTick = 0;
 volatile bool buttonPushed = false;
 
@@ -14,13 +14,13 @@ volatile bool buttonPushed = false;
 Horse horse;
 int jumpTick = -10; 
 bool needsToFall = false;
-const int threshold = 2;
+const int threshold = 4;
 bool collision = false;
 
 //obstacle
-Obstacle obs[8];
+Obstacle obs[16];
 bool hasObstacle[16][2];
-int row;
+int row = random(2);
 
 //collectibles
 //Collectible col[8];
@@ -35,17 +35,17 @@ void moveHorse() {
     collision = true;
     return;
   }
-  if (buttonPushed and horse.getYpos() == 0) {
+  if (buttonPushed and horse.getYpos() == 1) {
     horse.jump();
     jumpTick = currentTick;
   }
   buttonPushed = false;
-  if (currentTick - jumpTick == threshold) {
+  if (currentTick - jumpTick >= threshold) {
     jumpTick = -10;
     needsToFall = true;
   }
   if (needsToFall) {
-    if (!(hasObstacle[horse.getXpos()][0])) {
+    if (!(hasObstacle[horse.getXpos()][1])) {
       horse.fall();
       needsToFall = false;
     }
@@ -57,8 +57,8 @@ void moveHorse() {
 void generateObstacles() {
   int space = 0;
   double prob = 0;
-  for (int i = 15; i >= 0; --i) {
-    if (hasObstacle[i][row]) {
+  for (int i = 14; i >= 0; --i) {
+    if (!hasObstacle[i][row]) {
       ++space;
     } 
     else {
@@ -77,12 +77,19 @@ void generateObstacles() {
   }
   if (random(100) / 100.0 < prob) {
     Obstacle::spawn(obs, random(0, 3), row);
+    hasObstacle[15][row] = true;
   }
 }
 
 void moveObstacles() {
-  for (int i = 0; i < 8; ++i) {
+  for (int i = 0; i < 16; ++i) {
     obs[i].moveLeft();
+  }
+  for (int i = 0; i < 2; ++i) {
+    for (int j = 0; j < 15; ++j) {
+      hasObstacle[j][i] = hasObstacle[j + 1][i];
+    }
+    hasObstacle[15][i] = false;
   }
   //need to update hasobstacle
 }
@@ -112,6 +119,7 @@ void loop() {
   static unsigned int distance = 0;
 
   if (!playing) {
+    collision = false;
     if (buttonPushed) {
       //initializeGraphics();
       playing = true;
@@ -125,7 +133,7 @@ void loop() {
   tick();
   ++currentTick;
   if (collision) {
-    delay(100000000);
+    playing = false;
     //will change
   }
   delay(1000 / tickrate);

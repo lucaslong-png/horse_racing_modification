@@ -48,7 +48,7 @@ class Horse {
     Horse() {
       setSprite(0);
       animationState = 0;
-      ypos = 0;
+      ypos = 1;
     }
 
     void setSprite(int state) {
@@ -76,8 +76,8 @@ class Horse {
     //assumes ypos = 0
     long jump() {
       long starttime = millis();
-      Display::clearCell(xpos, 0);
-      ypos = 1;
+      Display::clearCell(xpos, ypos);
+      ypos = 0;
       animationState = 2;
       setSprite(animationState);
       display();
@@ -85,8 +85,8 @@ class Horse {
     }
 
     void fall() {
-      Display::clearCell(xpos, 1);
-      ypos = 0;
+      Display::clearCell(xpos, ypos);
+      ypos = 1;
       animationState = 0;
       setSprite(animationState);
       display();

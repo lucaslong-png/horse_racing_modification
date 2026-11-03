@@ -27,7 +27,7 @@ class Obstacle {
 
     //obstacles length will be 8
     static void spawn(Obstacle obstacles[], int type, int ypos) {
-      for (int i = 0; i < 8; ++i) {
+      for (int i = 0; i < 16; ++i) {
         if (obstacles[i].exists == false) {
           obstacles[i].xpos = 15;
           obstacles[i].ypos = ypos;
@@ -45,6 +45,9 @@ class Obstacle {
     }
 
     void moveLeft() {
+      if (!exists) {
+        return;
+      }
       Display::clearCell(xpos, ypos);
       if (xpos > 0) {
         --xpos;
