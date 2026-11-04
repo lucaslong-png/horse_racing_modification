@@ -122,5 +122,9 @@ class Display {
       lcd.print(" ");
     }
 
+    static void clear() {
+      lcd.clear();
+    }
+
 };
 LiquidCrystal Display::lcd(12, 11, 6, 5, 4, 3);

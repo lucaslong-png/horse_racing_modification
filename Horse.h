@@ -5,41 +5,6 @@
 class Horse {
   private:
     int animationState; //0 = run1, 1 = run2, 2 = jump
-    byte image[8];
-    byte horseImages[3][8] = {
-      {
-        B00000,
-        B00000,
-        B00010,
-        B00011,
-        B00010,
-        B01110,
-        B01010,
-        B01010,
-      },
-      
-      {
-        B00000,
-        B00000,
-        B00010,
-        B00011,
-        B00010,
-        B01110,
-        B01001,
-        B10010,
-      },
-
-      {
-        B00000,
-        B00000,
-        B00010,
-        B00011,
-        B00010,
-        B01110,
-        B01001,
-        B10001,
-      }
-    }; //3x8
     const int xpos = 1;
     int ypos;
     
@@ -47,6 +12,11 @@ class Horse {
 
     Horse() {
       setSprite(0);
+      animationState = 0;
+      ypos = 1;
+    }
+
+    void reset() {
       animationState = 0;
       ypos = 1;
     }

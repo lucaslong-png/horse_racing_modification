@@ -39,11 +39,6 @@ class Obstacle {
       }
     }
 
-    static void deleteObstacle(Obstacle& o) {
-      Display::clearCell(o.xpos, o.ypos);
-      o.exists = false;
-    }
-
     void moveLeft() {
       if (!exists) {
         return;
@@ -56,6 +51,10 @@ class Obstacle {
       else {
         exists = false;
       }
+    }
+
+    void setExists(bool b) {
+      exists = b;
     }
     
 

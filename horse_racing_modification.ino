@@ -1,14 +1,16 @@
-#include "Constants.h"
 #include <LiquidCrystal.h>
+#include "Constants.h"
 #include "Display.h"
 #include "Horse.h"
-//#include <Constants.h>
 #include "Obstacle.h"
 //#include <Collectible.h>
 
+//game
 int tickrate = 5;
 int currentTick = 0;
 volatile bool buttonPushed = false;
+bool playing = false;
+unsigned int distance = 0;
 
 //horse
 Horse horse;
@@ -20,7 +22,7 @@ bool collision = false;
 //obstacle
 Obstacle obs[16];
 bool hasObstacle[16][2];
-int row = random(2);
+int row;
 
 //collectibles
 //Collectible col[8];
@@ -39,7 +41,6 @@ void moveHorse() {
     horse.jump();
     jumpTick = currentTick;
   }
-  buttonPushed = false;
   if (currentTick - jumpTick >= threshold) {
     jumpTick = -10;
     needsToFall = true;
@@ -91,7 +92,6 @@ void moveObstacles() {
     }
     hasObstacle[15][i] = false;
   }
-  //need to update hasobstacle
 }
 
 
@@ -99,42 +99,72 @@ void tick() {
   moveHorse();
   generateObstacles();
   moveObstacles();
+  distance += 50;
+  if (distance > 500) { //100 is placeholder
+    digitalWrite(LED_PIN, HIGH);
+  } 
+}
+
+void gameSetup() {
+  //game
+  Display::clear();
+  currentTick = 0;
+  distance = 0;
+  digitalWrite(LED_PIN, LOW);
+
+  //horse
+  jumpTick = -10;
+  needsToFall = false;
+  collision = false;
+  horse.reset();
+  
+  //obstacle
+  row = random(2);
+  for (int i = 0; i < 16; ++i) {
+    for (int j = 0; j < 2; ++j) {
+      hasObstacle[i][j] = false;
+    }
+    obs[i].setExists(false);
+  }
 }
 
 void setup() {
+  randomSeed(analogRead(A1));
   pinMode(PIN_BUTTON, INPUT);
   digitalWrite(PIN_BUTTON, HIGH);
   pinMode(PIN_AUTOPLAY, OUTPUT);
   digitalWrite(PIN_AUTOPLAY, HIGH);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, LOW);
+  pinMode(TICKRATE_PIN, INPUT);
 
   // Digital pin 2 maps to interrupt 0
-  attachInterrupt(0/*PIN_BUTTON*/, buttonPush, FALLING);
+  attachInterrupt(0, buttonPush, FALLING);
 
-  Display::setupLCD();
-  
+  Display::setupLCD(); 
 }
 
 void loop() {
-  static bool playing = false;
-  static unsigned int distance = 0;
-
+  //setup
   if (!playing) {
+    distance = 0;
     collision = false;
+    digitalWrite(LED_PIN, LOW);
     if (buttonPushed) {
-      //initializeGraphics();
       playing = true;
       buttonPushed = false;
-      distance = 0;
+      gameSetup();
     }
     return;
   }
 
-
+  tickrate = map(analogRead(TICKRATE_PIN), 0, 1023, 5, 40);
   tick();
   ++currentTick;
   if (collision) {
+    tone(SOUND_PIN, 262, 200);
     playing = false;
-    //will change
   }
+  buttonPushed = false;
   delay(1000 / tickrate);
 }
