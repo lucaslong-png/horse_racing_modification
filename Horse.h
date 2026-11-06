@@ -9,7 +9,6 @@ class Horse {
     int ypos;
     
   public:
-
     Horse() {
       setSprite(0);
       animationState = 0;

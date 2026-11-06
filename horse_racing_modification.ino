@@ -3,14 +3,14 @@
 #include "Display.h"
 #include "Horse.h"
 #include "Obstacle.h"
-//#include <Collectible.h>
+#include "Collectible.h"
 
 //game
 int tickrate = 5;
 int currentTick = 0;
 volatile bool buttonPushed = false;
 bool playing = false;
-unsigned int distance = 0;
+int distance = 0;
 
 //horse
 Horse horse;
@@ -25,8 +25,9 @@ bool hasObstacle[16][2];
 int row;
 
 //collectibles
-//Collectible col[8];
-
+Collectible col[16];
+bool hasCollectible[16][2];
+int gap = 0;
 
 void buttonPush() {
   buttonPushed = true;
@@ -82,15 +83,32 @@ void generateObstacles() {
   }
 }
 
-void moveObstacles() {
+void generateCollectibles() {
+  double prob = 1.0 * gap / (gap + 8);
+  int colRow;
+  if (random(100) / 100.0 < prob) {
+    colRow = random(2);
+    if (!hasObstacle[15][colRow]) {
+      Collectible::spawn(col, random(0, 2), colRow);
+      hasCollectible[15][colRow] = true;
+      gap = 0;
+    }
+  }
+}
+
+void moveObjects() {
   for (int i = 0; i < 16; ++i) {
     obs[i].moveLeft();
+    col[i].moveLeft();
   }
+  ++gap;
   for (int i = 0; i < 2; ++i) {
     for (int j = 0; j < 15; ++j) {
       hasObstacle[j][i] = hasObstacle[j + 1][i];
+      hasCollectible[j][i] = hasCollectible[j + 1][i];
     }
     hasObstacle[15][i] = false;
+    hasCollectible[15][i] = false;
   }
 }
 
@@ -98,9 +116,10 @@ void moveObstacles() {
 void tick() {
   moveHorse();
   generateObstacles();
-  moveObstacles();
+  generateCollectibles();
+  moveObjects();
   distance += 50;
-  if (distance > 500) { //100 is placeholder
+  if (distance > 500) { //500 is placeholder
     digitalWrite(LED_PIN, HIGH);
   } 
 }
@@ -126,6 +145,15 @@ void gameSetup() {
     }
     obs[i].setExists(false);
   }
+
+  //collectible
+  for (int i = 0; i < 16; ++i) {
+    for (int j = 0; j < 2; ++j) {
+      hasCollectible[i][j] = false;
+    }
+    col[i].setExists(false);
+  }
+  gap = 0;
 }
 
 void setup() {
@@ -140,8 +168,10 @@ void setup() {
 
   // Digital pin 2 maps to interrupt 0
   attachInterrupt(0, buttonPush, FALLING);
-
   Display::setupLCD(); 
+  buttonPushed = false;
+  Display::startScreen();
+  while (!buttonPushed) {}
 }
 
 void loop() {

@@ -126,5 +126,13 @@ class Display {
       lcd.clear();
     }
 
+    static void startScreen() {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Press red button");
+      lcd.setCursor(0, 1);
+      lcd.print("to start");
+    }
+
 };
 LiquidCrystal Display::lcd(12, 11, 6, 5, 4, 3);

@@ -3,7 +3,7 @@
 #include "Display.h"
 
 class Obstacle {
-  private:
+  protected:
     //static int obstacleCount = 0;
     //static const byte sprites[3][8]; 
     //byte image[8];
@@ -17,7 +17,7 @@ class Obstacle {
       exists = false;
     }
 
-    void display() {
+    virtual void display() {
       Display::loadSprite(xpos, ypos, spriteChoice + 3);
     }
 
@@ -28,7 +28,7 @@ class Obstacle {
     //obstacles length will be 8
     static void spawn(Obstacle obstacles[], int type, int ypos) {
       for (int i = 0; i < 16; ++i) {
-        if (obstacles[i].exists == false) {
+        if (!obstacles[i].exists) {
           obstacles[i].xpos = 15;
           obstacles[i].ypos = ypos;
           obstacles[i].setSprite(type);
