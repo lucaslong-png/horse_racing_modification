@@ -64,16 +64,16 @@ class Display {
           B00100,
           B00100,
         },
-        //spike
+        //dynamite
         {
-          B00100,
-          B10101,
-          B01110,
+          B10001,
           B11111,
-          B01110,
-          B10101,
-          B00100,
-          B00000
+          B10001,
+          B11111,
+          B10001,
+          B10001,
+          B10001,
+          B10001
         },
         //dynamite
         {
@@ -98,16 +98,16 @@ class Display {
           B00000,
           B00000
         },
-        //placeholder, cookie
+        //star
         {
-          B00000,
-          B00000,
-          B00000,
-          B00000,
-          B11000,
-          B11100,
-          B11100,
-          B11000,
+          B00100,
+          B10101,
+          B01110,
+          B11111,
+          B01110,
+          B10101,
+          B00100,
+          B00000
         }
         }; //8x8 
       lcd.begin(16, 2);
@@ -125,6 +125,22 @@ class Display {
       lcd.setCursor(x, y);
       lcd.print(" ");
     }
+
+    static void displayScore(int score) {
+      int length = 0;
+      int s = score;
+      while (true) {
+        ++length;
+        s = s / 10;
+        if (s == 0) {
+          break;
+        }
+      }
+      lcd.setCursor(16 - length, 0);
+      lcd.print(score);
+
+  
+}
 
     static void clear() {
       lcd.clear();

@@ -49,6 +49,8 @@ void moveHorse() {
     for (int i = 0; i < 16; ++i) {
       if (col[i].getExists() and col[i].getXpos() == horse.getXpos() and col[i].getYpos() == horse.getYpos()) {
         col[i].setExists(false);
+        Display::clearCell(horse.getXpos(), horse.getYpos());
+        horse.display();
         break;
       }
     }
@@ -57,7 +59,7 @@ void moveHorse() {
     horse.jump();
     jumpTick = currentTick;
   }
-  if (currentTick - jumpTick >= threshold) {
+  if (jumpTick >= 0 and currentTick - jumpTick >= threshold) {
     jumpTick = -10;
     needsToFall = true;
   }
@@ -83,7 +85,7 @@ void generateObstacles() {
     }
   }
   if (space == 0) {
-    prob = 0.75;
+    prob = 0.66;
   }
   else if (space < 4) {
     prob = 0;
@@ -101,7 +103,7 @@ void generateObstacles() {
 }
 
 void generateCollectibles() {
-  double prob = 1.0 * gap / (gap + 8);
+  double prob = 1.0 * gap / (gap + 100);
   int colRow;
   if (random(100) / 100.0 < prob) {
     colRow = random(2);
@@ -131,11 +133,14 @@ void moveObjects() {
 }
 
 
+
+
 void tick() {
-  moveHorse();
   generateObstacles();
   generateCollectibles();
   moveObjects();
+  moveHorse();
+  Display::displayScore(score);
   score += 50;
 
 }
@@ -199,7 +204,7 @@ void loop() {
     return;
   }
 
-  tickrate = map(analogRead(TICKRATE_PIN), 0, 1023, 5, 40);
+  tickrate = map(analogRead(TICKRATE_PIN), 0, 1023, 2, 25);
   tick();
   ++currentTick;
   if (collision) {
