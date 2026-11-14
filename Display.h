@@ -18,6 +18,8 @@ class Display {
   public:
     static void setupLCD() {
       static byte graphics[8][8] = {
+        //horse
+        //horse run 1
         {
           B00000,
           B00000,
@@ -28,7 +30,7 @@ class Display {
           B01010,
           B01010,
         },
-        
+        //horse run 2
         {
           B00000,
           B00000,
@@ -39,7 +41,7 @@ class Display {
           B01001,
           B10010,
         },
-
+        //horse jump
         {
           B00000,
           B00000,
@@ -50,7 +52,8 @@ class Display {
           B01001,
           B10001,
         },
-
+        //obstacle
+        //tree
         {
           B01110,
           B11111,
@@ -61,39 +64,41 @@ class Display {
           B00100,
           B00100,
         },
-
+        //spike
+        {
+          B00100,
+          B10101,
+          B01110,
+          B11111,
+          B01110,
+          B10101,
+          B00100,
+          B00000
+        },
+        //dynamite
+        {
+          B00100,
+          B00100,
+          B01110,
+          B01110,
+          B01110,
+          B01110,
+          B01110,
+          B00000
+        },
+        //collectible
+        //cookie
         {
           B00000,
+          B01110,
+          B11011,
+          B10101,
+          B11011,
+          B01110,
           B00000,
-          B00000,
-          B00000,
-          B00011,
-          B00111,
-          B00111,
-          B00011,
+          B00000
         },
-
-        {
-          B00000,
-          B00000,
-          B00000,
-          B00000,
-          B11000,
-          B11100,
-          B11100,
-          B11000,
-        },
-        {
-          B00000,
-          B00000,
-          B00000,
-          B00000,
-          B00011,
-          B00111,
-          B00111,
-          B00011,
-        },
-
+        //placeholder, cookie
         {
           B00000,
           B00000,
@@ -104,7 +109,6 @@ class Display {
           B11100,
           B11000,
         }
-        //placeholders
         }; //8x8 
       lcd.begin(16, 2);
       for (int i = 0; i < 8; ++i) {

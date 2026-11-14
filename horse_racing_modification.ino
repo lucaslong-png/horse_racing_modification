@@ -1,20 +1,24 @@
 #include <LiquidCrystal.h>
-#include "Constants.h"
 #include "Display.h"
 #include "Horse.h"
 #include "Obstacle.h"
 #include "Collectible.h"
+
+//pins
+#define PIN_BUTTON 2
+#define TICKRATE_PIN A1
+#define SOUND_PIN 9
 
 //game
 int tickrate = 5;
 int currentTick = 0;
 volatile bool buttonPushed = false;
 bool playing = false;
-int distance = 0;
+int score = 0;
 
 //horse
 Horse horse;
-int jumpTick = -10; 
+int jumpTick = 0; 
 bool needsToFall = false;
 const int threshold = 4;
 bool collision = false;
@@ -23,6 +27,7 @@ bool collision = false;
 Obstacle obs[16];
 bool hasObstacle[16][2];
 int row;
+int currentobs;
 
 //collectibles
 Collectible col[16];
@@ -37,6 +42,16 @@ void moveHorse() {
   if (hasObstacle[horse.getXpos()][horse.getYpos()]) {
     collision = true;
     return;
+  }
+  if (hasCollectible[horse.getXpos()][horse.getYpos()]) {
+    score += 200;
+    tone(SOUND_PIN, 800, 200);
+    for (int i = 0; i < 16; ++i) {
+      if (col[i].getExists() and col[i].getXpos() == horse.getXpos() and col[i].getYpos() == horse.getYpos()) {
+        col[i].setExists(false);
+        break;
+      }
+    }
   }
   if (buttonPushed and horse.getYpos() == 1) {
     horse.jump();
@@ -75,12 +90,14 @@ void generateObstacles() {
   }
   else {
     row = random(2);
+    currentobs = random(3);
     prob = 1.0 * space / (space + 4);
   }
   if (random(100) / 100.0 < prob) {
-    Obstacle::spawn(obs, random(0, 3), row);
+    Obstacle::spawn(obs, currentobs, row);
     hasObstacle[15][row] = true;
   }
+
 }
 
 void generateCollectibles() {
@@ -89,7 +106,7 @@ void generateCollectibles() {
   if (random(100) / 100.0 < prob) {
     colRow = random(2);
     if (!hasObstacle[15][colRow]) {
-      Collectible::spawn(col, random(0, 2), colRow);
+      Collectible::spawn(col, random(2), colRow);
       hasCollectible[15][colRow] = true;
       gap = 0;
     }
@@ -101,6 +118,7 @@ void moveObjects() {
     obs[i].moveLeft();
     col[i].moveLeft();
   }
+
   ++gap;
   for (int i = 0; i < 2; ++i) {
     for (int j = 0; j < 15; ++j) {
@@ -118,27 +136,25 @@ void tick() {
   generateObstacles();
   generateCollectibles();
   moveObjects();
-  distance += 50;
-  if (distance > 500) { //500 is placeholder
-    digitalWrite(LED_PIN, HIGH);
-  } 
+  score += 50;
+
 }
 
 void gameSetup() {
   //game
   Display::clear();
   currentTick = 0;
-  distance = 0;
-  digitalWrite(LED_PIN, LOW);
-
+  score = 0;
   //horse
   jumpTick = -10;
   needsToFall = false;
   collision = false;
   horse.reset();
+  horse.display();
   
   //obstacle
   row = random(2);
+  currentobs = random(3);
   for (int i = 0; i < 16; ++i) {
     for (int j = 0; j < 2; ++j) {
       hasObstacle[i][j] = false;
@@ -157,14 +173,12 @@ void gameSetup() {
 }
 
 void setup() {
-  randomSeed(analogRead(A1));
+  randomSeed(analogRead(A0));
   pinMode(PIN_BUTTON, INPUT);
   digitalWrite(PIN_BUTTON, HIGH);
-  pinMode(PIN_AUTOPLAY, OUTPUT);
-  digitalWrite(PIN_AUTOPLAY, HIGH);
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, LOW);
   pinMode(TICKRATE_PIN, INPUT);
+  pinMode(SOUND_PIN, OUTPUT);
+  tone(SOUND_PIN, 255, 200);
 
   // Digital pin 2 maps to interrupt 0
   attachInterrupt(0, buttonPush, FALLING);
@@ -177,9 +191,6 @@ void setup() {
 void loop() {
   //setup
   if (!playing) {
-    distance = 0;
-    collision = false;
-    digitalWrite(LED_PIN, LOW);
     if (buttonPushed) {
       playing = true;
       buttonPushed = false;

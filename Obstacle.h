@@ -25,7 +25,6 @@ class Obstacle {
       spriteChoice = type;
     }
 
-    //obstacles length will be 8
     static void spawn(Obstacle obstacles[], int type, int ypos) {
       for (int i = 0; i < 16; ++i) {
         if (!obstacles[i].exists) {
@@ -56,7 +55,18 @@ class Obstacle {
     void setExists(bool b) {
       exists = b;
     }
+
+    bool getExists() {
+      return exists;
+    }
     
+    int getXpos() {
+      return xpos;
+    }
+
+    int getYpos() {
+      return ypos;
+    }
 
     
 };

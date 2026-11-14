@@ -11,7 +11,6 @@ class Horse {
   public:
     Horse() {
       setSprite(0);
-      animationState = 0;
       ypos = 1;
     }
 
@@ -43,14 +42,12 @@ class Horse {
     }  
 
     //assumes ypos = 0
-    long jump() {
-      long starttime = millis();
+    void jump() {
       Display::clearCell(xpos, ypos);
       ypos = 0;
       animationState = 2;
       setSprite(animationState);
       display();
-      return starttime;
     }
 
     void fall() {
